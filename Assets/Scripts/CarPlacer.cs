@@ -1,22 +1,23 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CarPlacer : MonoBehaviour
 {
-    public int width = 6;  // Ширина парковки
-    public int height = 6; // Высота парковки
-    public int carCount = 10; // Количество машин
-    public GameObject carPrefab; // Префаб машины
-    public GameObject longCarPrefab;
+    [SerializeField] private GameObject _carPrefab;
+    [SerializeField] private GameObject _busPrefab;
+    [SerializeField] private int _width;
+    [SerializeField] private int _height;
+    [SerializeField] private int _carCount;
 
-    private int[,] grid; // 0 - пусто, 1 - занято
+    private int[,] grid;
     private List<CarData> cars = new List<CarData>();
 
-    private enum Direction { Horizontal, Vertical }
+    private enum Direction { Up = 0, Right = 1, Down = 2, Left = 3 }
 
     private void Start()
     {
-        grid = new int[width, height];
+        grid = new int[_width, _height];
         PlaceCars();
     }
 
@@ -24,15 +25,15 @@ public class CarPlacer : MonoBehaviour
     {
         System.Random rand = new System.Random();
 
-        for (int i = 0; i < carCount; i++)
+        for (int i = 0; i < _carCount; i++)
         {
             bool placed = false;
             while (!placed)
             {
-                int x = rand.Next(0, width);
-                int y = rand.Next(0, height);
-                Direction dir = (Direction)rand.Next(0, 2);
-                int length = rand.Next(2, 4); // Длина машины: 2 или 3 клетки
+                int x = rand.Next(0, _width);
+                int y = rand.Next(0, _height);
+                Direction dir = (Direction)rand.Next(0, 4);
+                int length = rand.Next(2, 4);
 
                 if (CanPlaceCar(x, y, dir, length))
                 {
@@ -45,34 +46,32 @@ public class CarPlacer : MonoBehaviour
 
     private bool CanPlaceCar(int x, int y, Direction dir, int length)
     {
-        if (dir == Direction.Horizontal)
+        if (dir == Direction.Right || dir == Direction.Left)
         {
-            if (x + length > width)
-            {
+            if (x + length > _width)
                 return false;
-            }
             for (int i = 0; i < length; i++)
-            {
                 if (grid[x + i, y] == 1)
-                {
                     return false;
-                }
-            }
         }
         else
         {
-            if (y + length > height)
-            {
+            if (y + length > _height)
                 return false;
-            }
             for (int i = 0; i < length; i++)
-            {
                 if (grid[x, y + i] == 1)
-                {
                     return false;
-                }
-            }
         }
+
+        if (dir == Direction.Right && cars.Any(c => c.direction == Direction.Left && c.y == y))
+            return false;
+        if (dir == Direction.Left && cars.Any(c => c.direction == Direction.Right && c.y == y))
+            return false;
+        if (dir == Direction.Up && cars.Any(c => c.direction == Direction.Down && c.x == x))
+            return false;
+        if (dir == Direction.Down && cars.Any(c => c.direction == Direction.Up && c.x == x))
+            return false;
+
         return true;
     }
 
@@ -81,20 +80,13 @@ public class CarPlacer : MonoBehaviour
         CarData car = new CarData(x, y, dir, length);
         cars.Add(car);
         
-        if (dir == Direction.Horizontal)
-        {
+        if (dir == Direction.Right || dir == Direction.Left)
             for (int i = 0; i < length; i++)
-            {
                 grid[x + i, y] = 1;
-            }   
-        }
         else
-        {
             for (int i = 0; i < length; i++)
-            {
                 grid[x, y + i] = 1;
-            }
-        }
+
         InstantiateCar(car);
     }
 
@@ -102,17 +94,13 @@ public class CarPlacer : MonoBehaviour
     {
         float x = car.x;
         float y = car.y;
-        if (car.direction == Direction.Horizontal)
-        {
+        if (car.direction == Direction.Right || car.direction == Direction.Left)
             x = car.x + ((float)car.length / 2) - 0.5f;
-        }
         else
-        {
             y = car.y + ((float)car.length / 2) - 0.5f;
-        }
-        Vector3 position = new Vector3(x * 10, 2.3f, y * 10);
-        Quaternion rotation = car.direction != Direction.Horizontal ? Quaternion.identity : Quaternion.Euler(0, 90, 0);
-        Instantiate(car.length == 2 ? carPrefab : longCarPrefab, position, rotation);
+        Vector3 position = new Vector3(x * 10, 0, y * 10);
+        Quaternion rotation = Quaternion.Euler(0, (int)car.direction * 90, 0);
+        Instantiate(car.length == 2 ? _carPrefab : _busPrefab, position, rotation);
     }
 
     private class CarData

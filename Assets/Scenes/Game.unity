@@ -128,30 +128,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 312658351}
-  - component: {fileID: 312658350}
   - component: {fileID: 312658352}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: CarManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &312658350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 312658349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eac741f14239b5b4c85df911dc7c2e62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _carPrefab: {fileID: 100000, guid: 7ad45c544719e234b819ba76b8b00770, type: 3}
-  _width: 5
-  _height: 5
 --- !u!4 &312658351
 Transform:
   m_ObjectHideFlags: 0
@@ -179,11 +163,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56c35a30b175a343be2b4e28dbc3ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 6
-  height: 6
-  carCount: 10
-  carPrefab: {fileID: 100000, guid: 7ad45c544719e234b819ba76b8b00770, type: 3}
-  longCarPrefab: {fileID: 3298527340143751871, guid: 507777845a9393a4e83f8c362e915549, type: 3}
+  _carPrefab: {fileID: 100000, guid: 7ad45c544719e234b819ba76b8b00770, type: 3}
+  _busPrefab: {fileID: 3298527340143751871, guid: 507777845a9393a4e83f8c362e915549, type: 3}
+  _width: 6
+  _height: 6
+  _carCount: 10
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,7 +318,7 @@ GameObject:
   - component: {fileID: 398396196}
   - component: {fileID: 398396195}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -458,8 +442,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -498,12 +482,12 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 5000
-  m_UseColorTemperature: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
