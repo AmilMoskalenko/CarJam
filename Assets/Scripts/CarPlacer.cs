@@ -5,7 +5,9 @@ using UnityEngine;
 public class CarPlacer : MonoBehaviour
 {
     [SerializeField] private GameObject _carPrefab;
+    [SerializeField] private List<Material> _carMaterials;
     [SerializeField] private GameObject _busPrefab;
+    [SerializeField] private List<Material> _busMaterials;
     [SerializeField] private int _width;
     [SerializeField] private int _height;
     [SerializeField] private int _carCount;
@@ -100,7 +102,16 @@ public class CarPlacer : MonoBehaviour
             y = car.y + ((float)car.length / 2) - 0.5f;
         Vector3 position = new Vector3(x * 10, 0, y * 10);
         Quaternion rotation = Quaternion.Euler(0, (int)car.direction * 90, 0);
-        Instantiate(car.length == 2 ? _carPrefab : _busPrefab, position, rotation);
+        var newCar = Instantiate(car.length == 2 ? _carPrefab : _busPrefab, position, rotation);
+        System.Random rand = new System.Random();
+        if (car.length == 2)
+            newCar.GetComponentInChildren<Renderer>().material = _carMaterials[rand.Next(0, _carMaterials.Count)];
+        else
+        {
+            var busMaterial = newCar.GetComponentInChildren<Renderer>().materials;
+            busMaterial[1] =  _busMaterials[rand.Next(0, _busMaterials.Count)];
+            newCar.GetComponentInChildren<Renderer>().materials = busMaterial;
+        }
     }
 
     private class CarData

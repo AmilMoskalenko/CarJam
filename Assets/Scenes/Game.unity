@@ -164,7 +164,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _carPrefab: {fileID: 100000, guid: 7ad45c544719e234b819ba76b8b00770, type: 3}
+  _carMaterials:
+  - {fileID: 2100000, guid: 43162979aa00e5046b659ed91feb7481, type: 2}
+  - {fileID: 2100000, guid: fdafda5f641570545b39781778142384, type: 2}
+  - {fileID: 2100000, guid: f957d95b4b72fcd4fb3e3d575183e1b6, type: 2}
+  - {fileID: 2100000, guid: d197dfacf21425b4fad675eee195c5aa, type: 2}
+  - {fileID: 2100000, guid: 7690d725cea1e764b84e9e0be784f774, type: 2}
+  - {fileID: 2100000, guid: 5f3e48890ff8979438f03e5fbaafb6d1, type: 2}
   _busPrefab: {fileID: 3298527340143751871, guid: 507777845a9393a4e83f8c362e915549, type: 3}
+  _busMaterials:
+  - {fileID: 2100000, guid: 1e19de5ed28b40b4880bd22138e9bf8a, type: 2}
+  - {fileID: 2100000, guid: 1e8e151a8b55e354eb269aed5818e217, type: 2}
+  - {fileID: 2100000, guid: ecaf0a32082fd2a48b4243b080a0628b, type: 2}
+  - {fileID: 2100000, guid: 47e48dceb31a73d4ab989e72760a2893, type: 2}
+  - {fileID: 2100000, guid: 3801ad1461e689b4fa6b592fd1e718d8, type: 2}
+  - {fileID: 2100000, guid: ca9ee3534e5747a44b0853423dcca6d6, type: 2}
   _width: 6
   _height: 6
   _carCount: 10
