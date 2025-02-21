@@ -260,6 +260,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 47e48dceb31a73d4ab989e72760a2893, type: 2}
   - {fileID: 2100000, guid: 3801ad1461e689b4fa6b592fd1e718d8, type: 2}
   - {fileID: 2100000, guid: ca9ee3534e5747a44b0853423dcca6d6, type: 2}
+  _carsParent: {fileID: 362703996}
   _width: 6
   _height: 6
   _carCount: 10
@@ -291,7 +292,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d4780e94b043e642866674c1358e1f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _next: {fileID: 432781081}
+  _levelText: {fileID: 716539868}
   _reload: {fileID: 1173220638}
+  _camera: {fileID: 330585545}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,6 +433,37 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &362703995
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 362703996}
+  m_Layer: 0
+  m_Name: Cars
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &362703996
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362703995}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &398396194
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,7 +568,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 20, y: 0, z: 50}
-  m_LocalScale: {x: 20, y: 1, z: 20}
+  m_LocalScale: {x: 1000, y: 1, z: 1000}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1196,6 +1231,7 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 398396198}
+  - {fileID: 362703996}
   - {fileID: 312658351}
   - {fileID: 2092042864}
   - {fileID: 24172701}

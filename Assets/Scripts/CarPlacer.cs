@@ -8,6 +8,7 @@ public class CarPlacer : MonoBehaviour
     [SerializeField] private List<Material> _carMaterials;
     [SerializeField] private GameObject _busPrefab;
     [SerializeField] private List<Material> _busMaterials;
+    [SerializeField] private Transform _carsParent;
     [SerializeField] private int _width;
     [SerializeField] private int _height;
     [SerializeField] private int _carCount;
@@ -15,11 +16,14 @@ public class CarPlacer : MonoBehaviour
     public List<CarData> Cars => _cars;
     
     private List<CarData> _cars = new List<CarData>();
+    public int Width {get => _width; set => _width = value;}
+    public int Height { get => _height; set => _height = value; }
+    public int CarCount { get => _carCount; set => _carCount = value; }
     private int[,] _grid;
 
     private void Start()
     {
-        _grid = new int[_width, _height];
+        _grid = new int[Width, Height];
         PlaceCars();
     }
 
@@ -27,13 +31,13 @@ public class CarPlacer : MonoBehaviour
     {
         System.Random rand = new System.Random();
 
-        for (int i = 0; i < _carCount; i++)
+        for (int i = 0; i < CarCount; i++)
         {
             bool placed = false;
             while (!placed)
             {
-                int x = rand.Next(0, _width);
-                int y = rand.Next(0, _height);
+                int x = rand.Next(0, Width);
+                int y = rand.Next(0, Height);
                 Direction dir = (Direction)rand.Next(0, 4);
                 int length = rand.Next(2, 4);
 
@@ -50,7 +54,7 @@ public class CarPlacer : MonoBehaviour
     {
         if (dir == Direction.Right || dir == Direction.Left)
         {
-            if (x + length > _width)
+            if (x + length > Width)
                 return false;
             for (int i = 0; i < length; i++)
                 if (_grid[x + i, y] == 1)
@@ -58,7 +62,7 @@ public class CarPlacer : MonoBehaviour
         }
         else
         {
-            if (y + length > _height)
+            if (y + length > Height)
                 return false;
             for (int i = 0; i < length; i++)
                 if (_grid[x, y + i] == 1)
@@ -99,7 +103,7 @@ public class CarPlacer : MonoBehaviour
             y = carY + ((float)carLength / 2) - 0.5f;
         Vector3 position = new Vector3(x * 10, 0, y * 10);
         Quaternion rotation = Quaternion.Euler(0, (int)carDirection * 90, 0);
-        var newCar = Instantiate(carLength == 2 ? _carPrefab : _busPrefab, position, rotation);
+        var newCar = Instantiate(carLength == 2 ? _carPrefab : _busPrefab, position, rotation, _carsParent);
         System.Random rand = new System.Random();
         if (carLength == 2)
             newCar.GetComponentInChildren<Renderer>().material = _carMaterials[rand.Next(0, _carMaterials.Count)];

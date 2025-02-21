@@ -12,11 +12,12 @@ public class TouchManager : MonoBehaviour
     [SerializeField] private float _tryToMoveTime;
 
     private List<CarPlacer.CarData> _cars = new List<CarPlacer.CarData>();
+    private CarPlacer _carPlacer;
 
     private void Start()
     {
-        var carPlacer = GetComponent<CarPlacer>();
-        _cars = carPlacer.Cars;
+        _carPlacer = GetComponent<CarPlacer>();
+        _cars = _carPlacer.Cars;
     }
 
     private void Update()
@@ -34,6 +35,8 @@ public class TouchManager : MonoBehaviour
                     {
                         _cars.Remove(_cars.FirstOrDefault(car => car.obj == hit.transform.gameObject));
                         StartCoroutine(Move(hit.transform, _moveTime));
+                        if (_cars.Count == 0)
+                            StartCoroutine(NextLevel());
                     }
                     else
                         StartCoroutine(TryToMove(hit.transform));
@@ -46,7 +49,7 @@ public class TouchManager : MonoBehaviour
     {
         Vector3 pos1 = target.position;
         Vector3 targetDirection = target.forward;
-        float targetLength = 50;
+        float targetLength = _carPlacer.Width * 10;
 
         foreach (var car in _cars.ToList())
         {
@@ -64,22 +67,11 @@ public class TouchManager : MonoBehaviour
 
             Vector3 end1 = pos1 + targetDirection * targetLength;
             Vector3 end2 = pos2 + carDirection * carLength;
-            if (targetDirection == Vector3.forward && UpRight(pos1, end1, pos2, end2))
-            {
+            if ((targetDirection == Vector3.forward && UpRight(pos1, end1, pos2, end2)) ||
+                (targetDirection == Vector3.right && UpRight(pos1, end1, pos2, end2)) ||
+                (targetDirection == Vector3.back && RightDown(pos1, end1, pos2, end2)) ||
+                (targetDirection == Vector3.left && LeftUp(pos1, end1, pos2, end2)))
                 return false;
-            }
-            if (targetDirection == Vector3.right && UpRight(pos1, end1, pos2, end2))
-            {
-                return false;
-            }
-            if (targetDirection == Vector3.back && RightDown(pos1, end1, pos2, end2))
-            {
-                return false;
-            }
-            if (targetDirection == Vector3.left && LeftUp(pos1, end1, pos2, end2))
-            {
-                return false;
-            }
         }
         return true;
     }
@@ -143,6 +135,7 @@ public class TouchManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+        target.gameObject.SetActive(false);
     }
 
     private IEnumerator TryToMove(Transform target)
@@ -162,5 +155,12 @@ public class TouchManager : MonoBehaviour
             backTime += Time.deltaTime;
             yield return null;
         }
+    }
+
+    private IEnumerator NextLevel()
+    {
+        yield return new WaitForSeconds(_moveTime/5);
+        var uiManager = GetComponent<UIManager>();
+        uiManager.NextLevel();
     }
 }
