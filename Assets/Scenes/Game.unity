@@ -196,7 +196,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 20
-  _time: 10
+  _moveTime: 10
+  _tryToMoveSpeed: 10
+  _tryToMovetime: 0.2
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

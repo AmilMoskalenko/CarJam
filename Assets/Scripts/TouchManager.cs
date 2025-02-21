@@ -7,7 +7,9 @@ using System.Linq;
 public class TouchManager : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _time;
+    [SerializeField] private float _moveTime;
+    [SerializeField] private float _tryToMoveSpeed;
+    [SerializeField] private float _tryToMoveTime;
 
     private List<CarPlacer.CarData> _cars = new List<CarPlacer.CarData>();
 
@@ -31,7 +33,7 @@ public class TouchManager : MonoBehaviour
                     if (CanMove(hit.transform))
                     {
                         _cars.Remove(_cars.FirstOrDefault(car => car.obj == hit.transform.gameObject));
-                        StartCoroutine(Move(hit.transform, _time));
+                        StartCoroutine(Move(hit.transform, _moveTime));
                     }
                     else
                         StartCoroutine(TryToMove(hit.transform));
@@ -145,6 +147,20 @@ public class TouchManager : MonoBehaviour
 
     private IEnumerator TryToMove(Transform target)
     {
-        yield return null;
+        float forwardTime = 0f;
+        float backTime = 0f;
+
+        while (forwardTime < _tryToMoveTime/2)
+        {
+            target.Translate(Vector3.forward * _tryToMoveSpeed * Time.deltaTime);
+            forwardTime += Time.deltaTime;
+            yield return null;
+        }
+        while (backTime < _tryToMoveTime/2)
+        {
+            target.Translate(Vector3.back * _tryToMoveSpeed * Time.deltaTime);
+            backTime += Time.deltaTime;
+            yield return null;
+        }
     }
 }
