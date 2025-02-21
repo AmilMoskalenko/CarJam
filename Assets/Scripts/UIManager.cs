@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
         carPlacer.Width += _level;
         carPlacer.Height += _level;
         carPlacer.CarCount += _level * 3;
-        _camera.transform.position += new Vector3(_level * 5, _level * 17, -_level * 2);
+        _camera.transform.position += new Vector3(_level * 5, _level * 23, -_level * 2);
     }
 
     private void Start()
