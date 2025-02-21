@@ -12,14 +12,14 @@ public class CarPlacer : MonoBehaviour
     [SerializeField] private int _height;
     [SerializeField] private int _carCount;
 
-    private int[,] grid;
-    private List<CarData> cars = new List<CarData>();
-
-    private enum Direction { Up = 0, Right = 1, Down = 2, Left = 3 }
+    public List<CarData> Cars => _cars;
+    
+    private List<CarData> _cars = new List<CarData>();
+    private int[,] _grid;
 
     private void Start()
     {
-        grid = new int[_width, _height];
+        _grid = new int[_width, _height];
         PlaceCars();
     }
 
@@ -53,7 +53,7 @@ public class CarPlacer : MonoBehaviour
             if (x + length > _width)
                 return false;
             for (int i = 0; i < length; i++)
-                if (grid[x + i, y] == 1)
+                if (_grid[x + i, y] == 1)
                     return false;
         }
         else
@@ -61,17 +61,17 @@ public class CarPlacer : MonoBehaviour
             if (y + length > _height)
                 return false;
             for (int i = 0; i < length; i++)
-                if (grid[x, y + i] == 1)
+                if (_grid[x, y + i] == 1)
                     return false;
         }
 
-        if (dir == Direction.Right && cars.Any(c => c.direction == Direction.Left && c.y == y))
+        if (dir == Direction.Right && _cars.Any(c => c.direction == Direction.Left && c.y == y))
             return false;
-        if (dir == Direction.Left && cars.Any(c => c.direction == Direction.Right && c.y == y))
+        if (dir == Direction.Left && _cars.Any(c => c.direction == Direction.Right && c.y == y))
             return false;
-        if (dir == Direction.Up && cars.Any(c => c.direction == Direction.Down && c.x == x))
+        if (dir == Direction.Up && _cars.Any(c => c.direction == Direction.Down && c.x == x))
             return false;
-        if (dir == Direction.Down && cars.Any(c => c.direction == Direction.Up && c.x == x))
+        if (dir == Direction.Down && _cars.Any(c => c.direction == Direction.Up && c.x == x))
             return false;
 
         return true;
@@ -79,32 +79,29 @@ public class CarPlacer : MonoBehaviour
 
     private void PlaceCar(int x, int y, Direction dir, int length)
     {
-        CarData car = new CarData(x, y, dir, length);
-        cars.Add(car);
-        
         if (dir == Direction.Right || dir == Direction.Left)
             for (int i = 0; i < length; i++)
-                grid[x + i, y] = 1;
+                _grid[x + i, y] = 1;
         else
             for (int i = 0; i < length; i++)
-                grid[x, y + i] = 1;
+                _grid[x, y + i] = 1;
 
-        InstantiateCar(car);
+        InstantiateCar(x, y, dir, length);
     }
 
-    private void InstantiateCar(CarData car)
+    private void InstantiateCar(int carX, int carY, Direction carDirection, int carLength)
     {
-        float x = car.x;
-        float y = car.y;
-        if (car.direction == Direction.Right || car.direction == Direction.Left)
-            x = car.x + ((float)car.length / 2) - 0.5f;
+        float x = carX;
+        float y = carY;
+        if (carDirection == Direction.Right || carDirection == Direction.Left)
+            x = carX + ((float)carLength / 2) - 0.5f;
         else
-            y = car.y + ((float)car.length / 2) - 0.5f;
+            y = carY + ((float)carLength / 2) - 0.5f;
         Vector3 position = new Vector3(x * 10, 0, y * 10);
-        Quaternion rotation = Quaternion.Euler(0, (int)car.direction * 90, 0);
-        var newCar = Instantiate(car.length == 2 ? _carPrefab : _busPrefab, position, rotation);
+        Quaternion rotation = Quaternion.Euler(0, (int)carDirection * 90, 0);
+        var newCar = Instantiate(carLength == 2 ? _carPrefab : _busPrefab, position, rotation);
         System.Random rand = new System.Random();
-        if (car.length == 2)
+        if (carLength == 2)
             newCar.GetComponentInChildren<Renderer>().material = _carMaterials[rand.Next(0, _carMaterials.Count)];
         else
         {
@@ -112,19 +109,31 @@ public class CarPlacer : MonoBehaviour
             busMaterial[1] =  _busMaterials[rand.Next(0, _busMaterials.Count)];
             newCar.GetComponentInChildren<Renderer>().materials = busMaterial;
         }
+        CarData car = new CarData(carX, carY, carDirection, carLength, newCar);
+        _cars.Add(car);
     }
 
-    private class CarData
+    public class CarData
     {
         public int x, y, length;
         public Direction direction;
+        public GameObject obj;
 
-        public CarData(int x, int y, Direction direction, int length)
+        public CarData(int x, int y, Direction direction, int length, GameObject obj)
         {
             this.x = x;
             this.y = y;
             this.direction = direction;
             this.length = length;
+            this.obj = obj;
         }
     }
+}
+
+public enum Direction
+{
+    Up = 0,
+    Right = 1,
+    Down = 2,
+    Left = 3
 }
